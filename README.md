@@ -375,26 +375,6 @@ Jika ada pertanyaan atau butuh bantuan:
 
 ---
 
-## 📸 Screenshots
-
-### Admin Dashboard
-
-![Admin Dashboard](docs/screenshots/admin-dashboard.png)
-
-### Guest Dashboard
-
-![Guest Dashboard](docs/screenshots/guest-dashboard.png)
-
-### Master Buku
-
-![Master Buku](docs/screenshots/master-buku.png)
-
-### Transaksi Peminjaman
-
-![Transaksi Peminjaman](docs/screenshots/transaksi.png)
-
----
-
 ## 🔄 Changelog
 
 ### Version 1.0.0 (2025-01-14)
@@ -409,4 +389,4 @@ Jika ada pertanyaan atau butuh bantuan:
 
 ---
 
-**Made with ❤️ using Laravel Framework**
+**Made with Firman using Laravel Framework**
