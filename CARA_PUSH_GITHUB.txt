@@ -1,0 +1,150 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║                  CARA PUSH KE GITHUB - STEP BY STEP                       ║
+║                   Repository: FirmanJK/perpustakaan-mini                  ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+✅ Remote sudah di-set ke: https://github.com/FirmanJK/perpustakaan-mini.git
+✅ Branch sudah di-rename ke: main
+✅ Siap untuk di-push!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 LANGKAH 1: BUAT REPOSITORY DI GITHUB (JIKA BELUM)
+
+1. Buka browser, login ke GitHub
+2. Buka: https://github.com/new
+3. Isi form:
+   • Owner: FirmanJK
+   • Repository name: perpustakaan-mini
+   • Description: Sistem Manajemen Perpustakaan Mini dengan Laravel
+   • Visibility: ✅ Public (atau Private sesuai kebutuhan)
+   • ❌ JANGAN centang "Add a README file"
+   • ❌ JANGAN pilih .gitignore
+   • ❌ JANGAN pilih license
+4. Klik tombol hijau "Create repository"
+5. Biarkan halaman terbuka (jangan ditutup dulu)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 LANGKAH 2: PUSH KE GITHUB
+
+Buka CMD atau PowerShell, pastikan di folder project, lalu jalankan:
+
+git push -u origin main
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 LANGKAH 3: LOGIN (Jika Diminta)
+
+Jika muncul window login:
+
+Username: FirmanJK
+Password: [GUNAKAN PERSONAL ACCESS TOKEN, BUKAN PASSWORD]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔑 CARA BUAT PERSONAL ACCESS TOKEN (PENTING!)
+
+1. Buka: https://github.com/settings/tokens
+2. Klik: "Generate new token" → "Generate new token (classic)"
+3. Isi form:
+   • Note: perpustakaan-mini-access
+   • Expiration: 90 days (atau pilih sesuai kebutuhan)
+   • Select scopes: ✅ Centang "repo" (full control of private repositories)
+4. Scroll ke bawah, klik "Generate token"
+5. 📋 COPY TOKEN yang muncul (hanya muncul sekali!)
+   Contoh: ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+6. SIMPAN token di tempat aman (notepad, password manager)
+7. GUNAKAN token ini sebagai password saat git push
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ VERIFIKASI
+
+Setelah push berhasil:
+
+1. Refresh halaman GitHub repository
+2. Pastikan semua file sudah ada
+3. Pastikan README.md tampil dengan baik di halaman utama
+4. Cek URL: https://github.com/FirmanJK/perpustakaan-mini
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔄 PUSH PERUBAHAN SELANJUTNYA
+
+Setiap kali ada perubahan code:
+
+git add .
+git commit -m "Deskripsi perubahan"
+git push
+
+Atau gunakan VSCode Source Control (Ctrl+Shift+G):
+1. Stage changes (klik +)
+2. Isi commit message
+3. Klik Commit
+4. Klik Sync/Push
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🆘 TROUBLESHOOTING
+
+❌ Error: "You are not allowed to push code to this project"
+✅ Solution: 
+   - Pastikan repository sudah dibuat di GitHub
+   - Pastikan repository name: perpustakaan-mini (huruf kecil, tanpa spasi)
+   - Pastikan Anda login dengan akun FirmanJK
+
+❌ Error: "Repository not found"
+✅ Solution:
+   - Buat repository dulu di GitHub
+   - Pastikan nama repository sama persis: perpustakaan-mini
+
+❌ Error: "Authentication failed"
+✅ Solution:
+   - Gunakan Personal Access Token, BUKAN password GitHub
+   - Pastikan token punya scope "repo"
+   - Buat token baru jika sudah expired
+
+❌ Error: "Failed to push some refs"
+✅ Solution:
+   git pull origin main --allow-unrelated-histories
+   git push origin main
+
+❌ Credential tersimpan salah
+✅ Solution (Windows):
+   1. Buka "Credential Manager" di Windows
+   2. Cari "git:https://github.com"
+   3. Hapus credential yang salah
+   4. Push ulang, masukkan token yang benar
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 COMMAND REFERENCE
+
+# Lihat status
+git status
+
+# Lihat remote
+git remote -v
+
+# Lihat commit history
+git log --oneline
+
+# Lihat perubahan
+git diff
+
+# Hapus file dari staging
+git reset HEAD namafile.php
+
+# Batalkan perubahan file
+git checkout -- namafile.php
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ SELESAI! Repository Anda siap di GitHub! ✨
+
+URL Repository: https://github.com/FirmanJK/perpustakaan-mini
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
