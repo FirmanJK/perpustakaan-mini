@@ -59,15 +59,28 @@
                                                         {{-- display label alias on type field not hidden --}}
                                                         @if ($header->type != 'hidden')
                                                             <label for="example-text-input" class="form-control-label"
-                                                                {{ $primary ? ($generateid ? ' style=display:none;' : '') : '' }}>{{ $header->alias }}</label>
+                                                                {{ $primary ? ($generateid ? '' : '') : '' }}>{{ $header->alias }}</label>
                                                         @endif
                                                         {{-- field type char and string --}}
                                                         @if ($header->type == 'char' || $header->type == 'string')
-                                                            <input class="form-control  {{ $header->class }}"
-                                                                {{ $primary ? ($generateid ? ' key=true type=hidden' : ' type=text') : ' type=text' }}
-                                                                value="{{ old($header->field) ? old($header->field) : $header->default }}"
-                                                                name="{{ $header->field }}"
-                                                                maxlength="{{ $header->length }}">
+                                                            @if ($primary && $generateid && isset($preview_no_transaksi))
+                                                                {{-- Show preview for auto-generated field --}}
+                                                                <input class="form-control {{ $header->class }}"
+                                                                    type="text"
+                                                                    value="{{ $preview_no_transaksi }}"
+                                                                    readonly
+                                                                    style="background-color: #e9ecef; cursor: not-allowed;">
+                                                                <input type="hidden" name="{{ $header->field }}" value="">
+                                                                <p class='text-info text-xs pt-1 px-1'>
+                                                                    <i class="fas fa-info-circle"></i> Nomor transaksi akan di-generate otomatis saat menyimpan
+                                                                </p>
+                                                            @else
+                                                                <input class="form-control  {{ $header->class }}"
+                                                                    {{ $primary ? ($generateid ? ' key=true type=hidden' : ' type=text') : ' type=text' }}
+                                                                    value="{{ old($header->field) ? old($header->field) : $header->default }}"
+                                                                    name="{{ $header->field }}"
+                                                                    maxlength="{{ $header->length }}">
+                                                            @endif
                                                             @if ($header->note != '')
                                                                 <p class='text-secondary text-xs pt-1 px-1'>
                                                                     {{ '*) ' . $header->note }}

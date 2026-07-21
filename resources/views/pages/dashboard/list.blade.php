@@ -1,18 +1,8 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => ''])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Dashboard'])
     <div class="container-fluid py-4">
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card mb-4">
-                    <div class="card-header pb-0 p-3">
-                        <h6 class="mb-1">Dashboard</h6>
-                        <p class="text-sm">Dashboard MSJframework</p>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row">
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
@@ -143,7 +133,7 @@
                                         <i class="ni ni-camera-compact text-dark opacity-10"></i>
                                     </div>
                                     <h5 class="text-white mb-1">Get started with Argon</h5>
-                                    <p>There’s nothing I really wanted to do in life that I wasn’t able to get good at.</p>
+                                    <p>There's nothing I really wanted to do in life that I wasn't able to get good at.</p>
                                 </div>
                             </div>
                             <div class="carousel-item h-100"
@@ -154,7 +144,7 @@
                                         <i class="ni ni-bulb-61 text-dark opacity-10"></i>
                                     </div>
                                     <h5 class="text-white mb-1">Faster way to create web pages</h5>
-                                    <p>That’s my skill. I’m not really specifically talented at anything except for the
+                                    <p>That's my skill. I'm not really specifically talented at anything except for the
                                         ability to learn.</p>
                                 </div>
                             </div>
@@ -166,7 +156,7 @@
                                         <i class="ni ni-trophy text-dark opacity-10"></i>
                                     </div>
                                     <h5 class="text-white mb-1">Share with us your design tips!</h5>
-                                    <p>Don’t be afraid to be wrong because you can’t learn anything from a compliment.</p>
+                                    <p>Don't be afraid to be wrong because you can't learn anything from a compliment.</p>
                                 </div>
                             </div>
                         </div>

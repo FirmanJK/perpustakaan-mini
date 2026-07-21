@@ -248,6 +248,58 @@ class TranscController extends Controller
         }
         //check insert
         if ($insert_data) {
+            // DEBUG: Log all data to see what's available
+            \Log::info('Stock Management - INSERT SUCCESSFUL', [
+                'dmenu' => $data['dmenu'],
+                'all_attributes' => $attributes,
+                'has_book_id' => isset($attributes['book_id']),
+                'tabel' => $data['tabel']
+            ]);
+            
+            // LOGIKA STOK BUKU: Kurangi stok saat peminjaman dibuat
+            if ($data['dmenu'] == 'trslnx' && isset($attributes['book_id'])) {
+                $book_id = $attributes['book_id'];
+                
+                // Log untuk debugging
+                \Log::info('Stock Management - Creating Loan', [
+                    'dmenu' => $data['dmenu'],
+                    'book_id' => $book_id,
+                    'attributes' => $attributes
+                ]);
+                
+                $buku = DB::table('mst_books')->where('id', $book_id)->first();
+                
+                if ($buku) {
+                    \Log::info('Stock Management - Book Found', [
+                        'book_id' => $book_id,
+                        'judul' => $buku->judul,
+                        'stok_before' => $buku->stok
+                    ]);
+                    
+                    if ($buku->stok > 0) {
+                        DB::table('mst_books')
+                            ->where('id', $book_id)
+                            ->decrement('stok', 1);
+                        
+                        // Verify the update
+                        $buku_after = DB::table('mst_books')->where('id', $book_id)->first();
+                        \Log::info('Stock Management - Stock Decremented', [
+                            'book_id' => $book_id,
+                            'stok_after' => $buku_after->stok
+                        ]);
+                    } else {
+                        \Log::warning('Stock Management - No Stock Available', [
+                            'book_id' => $book_id,
+                            'current_stok' => $buku->stok
+                        ]);
+                    }
+                } else {
+                    \Log::error('Stock Management - Book Not Found', [
+                        'book_id' => $book_id
+                    ]);
+                }
+            }
+            
             //insert sys_log
             $syslog->log_insert('C', $data['dmenu'], 'Created : ' . $idtrans, '1');
             // Set a session message
@@ -433,10 +485,66 @@ class TranscController extends Controller
         //list data 
         $data['table_header'] = DB::table('sys_table')->where(['gmenu' => $data['gmenuid'], 'dmenu' => $data['dmenu'],  'list' => '1'])->orderBy('urut')->get();
         $data['table_detail'] = DB::table($data['tabel'])->get();
+        
+        // LOGIKA STOK BUKU: Ambil data transaksi lama SEBELUM update
+        $transaksi_lama = null;
+        if ($data['dmenu'] == 'trslnx') {
+            $transaksi_lama = DB::table($data['tabel'])->where($wherekey)->first();
+        }
+        
         // Update data by id
         $updateData = DB::table($data['tabel'])->where($wherekey)->update($attributes + ['user_update' => session('username')]);
+        
         //check update
         if ($updateData) {
+            // LOGIKA STOK BUKU: Tambah stok saat status diubah menjadi "Dikembalikan"
+            if ($data['dmenu'] == 'trslnx' && isset($attributes['status']) && $transaksi_lama) {
+                // Log untuk debugging
+                \Log::info('Stock Management - Updating Loan Status', [
+                    'dmenu' => $data['dmenu'],
+                    'book_id' => $transaksi_lama->book_id,
+                    'old_status' => $transaksi_lama->status,
+                    'new_status' => $attributes['status']
+                ]);
+                
+                // Jika status berubah menjadi "Dikembalikan" dan sebelumnya "Dipinjam"
+                if ($attributes['status'] == 'Dikembalikan' && $transaksi_lama->status == 'Dipinjam') {
+                    $buku_before = DB::table('mst_books')->where('id', $transaksi_lama->book_id)->first();
+                    
+                    DB::table('mst_books')
+                        ->where('id', $transaksi_lama->book_id)
+                        ->increment('stok', 1);
+                    
+                    $buku_after = DB::table('mst_books')->where('id', $transaksi_lama->book_id)->first();
+                    \Log::info('Stock Management - Stock Incremented (Return)', [
+                        'book_id' => $transaksi_lama->book_id,
+                        'stok_before' => $buku_before->stok,
+                        'stok_after' => $buku_after->stok
+                    ]);
+                }
+                // Jika status berubah dari "Dikembalikan" kembali ke "Dipinjam"
+                elseif ($attributes['status'] == 'Dipinjam' && $transaksi_lama->status == 'Dikembalikan') {
+                    $buku = DB::table('mst_books')->where('id', $transaksi_lama->book_id)->first();
+                    if ($buku && $buku->stok > 0) {
+                        DB::table('mst_books')
+                            ->where('id', $transaksi_lama->book_id)
+                            ->decrement('stok', 1);
+                        
+                        $buku_after = DB::table('mst_books')->where('id', $transaksi_lama->book_id)->first();
+                        \Log::info('Stock Management - Stock Decremented (Re-borrow)', [
+                            'book_id' => $transaksi_lama->book_id,
+                            'stok_before' => $buku->stok,
+                            'stok_after' => $buku_after->stok
+                        ]);
+                    } else {
+                        \Log::warning('Stock Management - Cannot re-borrow, no stock', [
+                            'book_id' => $transaksi_lama->book_id,
+                            'current_stok' => $buku ? $buku->stok : 'book not found'
+                        ]);
+                    }
+                }
+            }
+            
             //insert sys_log
             $syslog->log_insert('U', $data['dmenu'], 'Updated : ' . $id, '1');
             // Set a session message

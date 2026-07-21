@@ -20,57 +20,6 @@
                                                 class="fas fa-circle-left me-1"> </i><span
                                                 class="font-weight-bold">Kembali</button>
                                     </div>
-                                    <div class="col-md-3 md-auto justify-content-end row">
-                                        <div class="col">
-                                            {{-- set value filter --}}
-                                            <?php $check_filter = ''; ?>
-                                            @foreach ($filter as $key => $value)
-                                                <input type="hidden" name="f{{ $key }}"
-                                                    value="{{ $value }}" />
-                                                @php
-                                                    if (
-                                                        preg_replace('/\s+/', '', strtolower(@$table_class->alias)) ==
-                                                        preg_replace('/\s+/', '', strtolower($key))
-                                                    ) {
-                                                        $check_filter = $value == '%' ? '' : $value;
-                                                    }
-                                                @endphp
-                                            @endforeach
-                                        </div>
-                                        <div class="col">
-                                            {{-- display label alias on class filter --}}
-                                            Filter {{ @$table_class->alias }} :
-                                            <select class="form-select" id="{{ @$table_class->field }}"
-                                                style="width: 150px;">
-                                                @if (@$table_class->query != '')
-                                                    @if ($check_filter != '')
-                                                        @php
-                                                            $data_query = DB::select(@$table_class->query);
-                                                        @endphp
-                                                        @foreach ($data_query as $q)
-                                                            <?php $sAsArray = array_values((array) $q); ?>
-                                                            @if ($check_filter == $sAsArray[0])
-                                                                <option value="{{ $sAsArray[0] }}">
-                                                                    {{ $sAsArray[0] }} - {{ $sAsArray[1] }}
-                                                                </option>
-                                                            @endif
-                                                        @endforeach
-                                                    @else
-                                                        <option value="" selected>% - All</option>
-                                                        @php
-                                                            $data_query = DB::select(@$table_class->query);
-                                                        @endphp
-                                                        @foreach ($data_query as $q)
-                                                            <?php $sAsArray = array_values((array) $q); ?>
-                                                            <option value="{{ $sAsArray[0] }}">
-                                                                {{ $sAsArray[0] }} - {{ $sAsArray[1] }}
-                                                            </option>
-                                                        @endforeach
-                                                    @endif
-                                                @endif
-                                            </select>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -250,24 +199,14 @@
         let columnAbjad = '';
         $(document).ready(function() {
             let table = $('#list_{{ $dmenu }}').DataTable();
-            let indexStatus = 0;
             let numColumns = $('#list_{{ $dmenu }}').DataTable().columns().count();
             let columnNames = '';
-            let filter = '{{ @$table_class->alias }}'.toLowerCase();
             for (let index = 0; index < numColumns; index++) {
                 columnNames = $('#list_{{ $dmenu }}').DataTable().columns(index).header()[0].textContent;
-                filtercolom = columnNames.toLowerCase();
                 if (columnNames == 'Status' || columnNames == 'status' || columnNames == 'STATUS') {
                     columnAbjad = String.fromCharCode(65 + index);
                 }
-                if (filtercolom == filter) {
-                    indexStatus = index;
-                }
             }
-            //redraw table where filter
-            $('#{{ @$table_class->field }}').change(function() {
-                table.column(indexStatus).search($(this).val()).draw();
-            })
             //check note
             if ($('*').hasClass('exp')) {
                 $('#noted').html(`<code>Note :( <i aria-hidden="true" style="color: #ffc2cd;"
@@ -290,6 +229,7 @@
         $('#list_{{ $dmenu }}').DataTable({
             "language": {
                 "search": "Cari :",
+                "searchPlaceholder": "",
                 "lengthMenu": "Tampilkan _MENU_ baris",
                 "zeroRecords": "Maaf - Data tidak ada",
                 "info": "Data _START_ - _END_ dari _TOTAL_",

@@ -529,8 +529,8 @@ class DatabaseSeeder extends Seeder
 
         //insert tabel sys_app        
         DB::table('sys_app')->insert([
-            'appid' => 'msjframework',
-            'appname' => 'MSJFramework',
+            'appid' => 'msjperpustakaan',
+            'appname' => 'MSJ Perpustakaan',
             'description' => 'Framework Pembuatan Aplikasi Baru',
             'company' => 'PT MULTI SPUNINDO JAYA Tbk',
             'address' => 'Desa Jabaran, Balongbendo 61263.',
@@ -557,6 +557,16 @@ class DatabaseSeeder extends Seeder
             menu_rpt_seeder::class,
             tabel_rpt_seeder::class,
             example_call_seed::class,
+            // Seeder Perpustakaan - Menu dulu baru tabel
+            menu_perpustakaan::class,
+            tabel_mst_books::class,
+            tabel_mst_members::class,
+            tabel_trs_loans::class,
+            sysid_trslnx::class,  // Auto-generate nomor transaksi
+            report_perpustakaan::class,
+            role_perpustakaan::class,
+            user_perpustakaan::class,
+            data_perpustakaan::class,
         ]);
     }
 }
